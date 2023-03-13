@@ -43,7 +43,6 @@ require __DIR__.'/auth.php';
 Route::prefix('/blog')->group(function(){
     Route::get('/create', [PostController::class, 'create'])->name('blog.create');
     Route::get('/', [PostController::class, 'index'])->name('blog.index');
-    
     Route::get('/{id}', [PostController::class, 'show'])->name('blog.show');
     Route::post('/', [PostController::class, 'store'])->name('blog.store');
     Route::get('/edit/{id}', [PostController::class, 'edit'])->name('blog.edit');
@@ -54,23 +53,26 @@ Route::prefix('/blog')->group(function(){
 
 
 //Dcotor route
-Route::get('/admin/create', [DoctorController::class, 'create'])->name('admin.create');
+Route::get('/admin/create_doctor', [DoctorController::class, 'create'])->name('admin.create');
+
+
+
 Route::get('/admin', [DoctorController::class, 'index'])->name('admin.index');
-Route::get('/admin/app', [DoctorController::class, 'appointment'])->name('admin.appointment');
-Route::get('/admin/doc', [DoctorController::class, 'doctor'])->name('admin.doctor');
+Route::get('/admin/appointment', [DoctorController::class, 'appointment'])->name('admin.appointment');
+Route::get('/admin/doctor', [DoctorController::class, 'doctor'])->name('admin.doctor');
+Route::post('/admin', [DoctorController::class, 'store'])->name('admin.store');
 
 Route::get('/admin/{id}', [DoctorController::class, 'show'])->name('admin.show');
-Route::post('/admin', [DoctorController::class, 'store'])->name('admin.store');
 Route::get('/admin/{id}/edit', [DoctorController::class, 'edit'])->name('admin.edit');
 Route::patch('/admin/{id}', [DoctorController::class, 'update'])->name('admin.update');
 Route::get('/admin/{id}', [DoctorController::class, 'destroy'])->name('admin.delete');
 
 Route::get('/admin/test/create', [TestimonyController::class, 'create'])->name('admin.create_testimony');
-Route::get('/admin/test', [TestimonyController::class, 'index'])->name('admin.testimony');
-Route::post('/', [TestimonyController::class, 'store'])->name('admin.store_testimony');
+Route::get('/admin/testimony/hos', [TestimonyController::class, 'index'])->name('admin.testimony');
+Route::post('/admins', [TestimonyController::class, 'store'])->name('store.testimony');
 
 Route::get('/admin/team/create', [TeamController::class, 'create'])->name('team.create');
 Route::get('/admin/team/list', [TeamController::class, 'index'])->name('team.index');
-Route::post('/', [TeamController::class, 'store'])->name('team.store');
+Route::post('/adminss', [TeamController::class, 'store'])->name('team.store');
 
 Route::fallback(fallback::class);

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\postFormRequest;
 use App\Models\doctor;
 use App\Http\Requests\StoredoctorRequest;
 use App\Http\Requests\UpdatedoctorRequest;
@@ -9,6 +10,7 @@ use App\Models\post;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Redirect;
 
 class DoctorController extends Controller
 {
@@ -22,7 +24,9 @@ class DoctorController extends Controller
     }
     public function index()
     {
+        
         return view('blog.admin.index');
+    
     }
 
     /**
@@ -38,6 +42,7 @@ class DoctorController extends Controller
      */
     public function store(StoredoctorRequest $request)
     {
+        $request->validated();
         $user_id = Auth::user()['id'];
         doctor::create([
             "doctor_name" => $request->doctor_name,
@@ -47,7 +52,7 @@ class DoctorController extends Controller
             "doctor_image" => "tempo",
             "user_id" => $user_id
         ]);
-        redirect()->route('admin.doctor');
+        return redirect(route('admin.doctor'));
     }
 
     /**

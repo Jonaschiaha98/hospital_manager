@@ -63,6 +63,20 @@
 
     <!-- Navbar & Carousel Start -->
     <div class="container-fluid position-relative p-0">
+        @if ($errors->any())
+        <div class="error">
+            <div>
+                <h3 class="text-red-700">Warning ...</h3>
+            </div>
+            <div>
+                <ul>
+                @foreach ($errors->all() as $error)
+                    <li class="text-red-800">{{ $error }}</li>
+                @endforeach
+            </ul>
+            </div>
+        </div>
+        @endif
         <nav class="navbar navbar-expand-lg navbar-dark px-5 py-3 py-lg-0">
             <a href="index.html" class="navbar-brand p-0">
                 <h1 class="m-0"><i class="fa fa-user-tie me-2"></i>Hospital Manager</h1>
@@ -394,7 +408,7 @@
                         <h5 class="fw-bold text-primary text-uppercase">My Appointments</h5>
                         <h1 class="mb-0">Need to book an Appointment? Please Feel Free to create one yourself.</h1>
                     </div>
-                    @if (isset($posts))
+                    @isset($posts)
                     <table>
                         <tr>
                             <th class="user">Patient Name</th>
@@ -413,12 +427,24 @@
                             @endforeach
                         </tr>
                     </table>
-                    @endif
                     <div class="d-flex justify-content-center">
                         {{  $posts->links()  }}
                     </div>
+                    @endisset
                 </div>
                 <div class="col-lg-5">
+                        {{-- @if ($errors->any())
+                            <div>
+                                <h3 class="text-red-700">Warning ...</h3>
+                            </div>
+                            <div>
+                                <ul>
+                                @foreach ($errors->all() as $error)
+                                    <li class="text-red-800">{{ $error }}</li>
+                                @endforeach
+                            </ul>
+                            </div>
+                        @endif --}}
                     <div class="bg-primary rounded h-100 d-flex align-items-center p-5 wow zoomIn" data-wow-delay="0.9s">
                         <form action="{{ route('blog.store') }}" method="post">
                             @csrf
@@ -439,7 +465,7 @@
                                 
                                 <div class="col-12">
                                     <select class="form-select bg-light border-0" style="height: 55px;" name="doctor_name">
-                                        <option selected>Select A Doctor</option>
+                                        <option selected value="">Select A Doctor</option>
                                         @isset($doctors)
                                             @foreach ($doctors as $doctor)
                                             <option value="{{ $doctor->doctor_name }}">{{ $doctor->doctor_name }}</option>

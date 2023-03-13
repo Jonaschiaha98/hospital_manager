@@ -1,7 +1,7 @@
 @include('blog.admin.header')
 
 <div class="work">
-  <h1 class="greetings"> You are welcome my Doctor</h1>
+  <p class="greet">Greetings Dr {{ Str::ucfirst(Auth::user()['name']) }}</p>
 </div>
 
 

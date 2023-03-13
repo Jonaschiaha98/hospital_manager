@@ -1,5 +1,19 @@
 @include('blog.admin.header')
 <div class="work">
+  @if ($errors->any())
+  <div class="errors">
+    <div>
+        <h3 class="text-red-700">Warning ...</h3>
+    </div>
+    <div>
+        <ul>
+        @foreach ($errors->all() as $error)
+            <li class="text-red-800">{{ $error }}</li>
+        @endforeach
+    </ul>
+    </div>
+  </div>
+  @endif
   <div class="form">
     <form action="{{ route('team.store') }}" method="post">
       @csrf

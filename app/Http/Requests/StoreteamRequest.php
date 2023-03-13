@@ -22,7 +22,11 @@ class StoreteamRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            "name" => "required|max:255|unique:teams,name,",
+            "phone" => "required|max:255|unique:posts,phone",
+            "email" => "required|max:255",
+            "carrier" => "required|max:255",
+            "image_path" => "max:255",
         ];
     }
 }

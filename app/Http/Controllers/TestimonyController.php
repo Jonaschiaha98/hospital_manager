@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\postFormRequest;
 use App\Models\testimony;
 use App\Http\Requests\StoretestimonyRequest;
 use App\Http\Requests\UpdatetestimonyRequest;
@@ -31,6 +32,7 @@ class TestimonyController extends Controller
      */
     public function create()
     {
+        // dd('hello');
         return view('blog.admin.create_testimony');
     }
     /**
@@ -38,6 +40,7 @@ class TestimonyController extends Controller
      */
     public function store(StoretestimonyRequest $request)
     {
+        $request->validated();
         $user_id = Auth::user()['id'];
         testimony::create([
             "name" => $request->name,
@@ -45,7 +48,7 @@ class TestimonyController extends Controller
             "image_path" => "tempo",
             "user_id" => $user_id
         ]);
-        redirect(route('admin.testimony'));
+        return redirect(route('admin.testimony'));
     }
 
     /**

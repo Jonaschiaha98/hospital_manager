@@ -22,7 +22,11 @@ class StoredoctorRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            "doctor_name" => "required|max:255|unique:doctors,doctor_name,",
+            "phone" => "required|max:255|unique:doctors,phone",
+            "email" => "required|max:255",
+            "doctor_image" => "max:255",
+            "specialization" => "required|max:255",            
         ];
     }
 }

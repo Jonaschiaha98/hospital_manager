@@ -22,7 +22,12 @@ class StorepostRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            "patient_name" => "required|max:255",
+            "phone" => "required|max:255|unique:posts,phone",
+            "app_date" => "required",
+            "email" => "required|max:255",
+            "doctor_name" => "required|max:255",
+            
         ];
     }
 }

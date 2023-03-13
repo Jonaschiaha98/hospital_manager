@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\postFormRequest;
 use App\Models\team;
 use App\Http\Requests\StoreteamRequest;
 use App\Http\Requests\UpdateteamRequest;
@@ -40,6 +41,7 @@ class TeamController extends Controller
      */
     public function store(StoreteamRequest $request)
     {
+        $request->validated();
         $user_id = Auth::user()['id'];
         team::create([
             "name" => $request->name,

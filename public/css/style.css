@@ -531,7 +531,8 @@ h6,
     padding: 5px;
 } 
 .admin_navbar ul{
-    width: 80%;
+    text-align: center;
+    width: 100%;
     list-style-type: none;
     /* border: 1px solid red; */
     
@@ -563,10 +564,13 @@ h6,
     width: 80%;
     margin: 5% auto;
 }
-.greetings{
+.greet{
+    font-size: x-large;
+    font-family: serif;
+    color: #FFFFFF;
     position: fixed;
-    right: 30%;
-    top: 40%;
+    right: 40%;
+    top: 20%;
 }
 .input{
     padding: 3%;
@@ -597,4 +601,27 @@ h6,
 }
 .w-5{
     height: 15px;
+}
+.error{
+    position: fixed;
+    right: 2%;
+    top: 24%;
+    color: red;
+    /* background-color: rgb(226, 216, 216); */
+    opacity: 1;
+    z-index: 10;
+}
+.errors{
+    background-color: rgb(212, 205, 205);
+    text-align: center;
+    color: red;
+}
+.errors ul{
+    list-style-type: none;
+}
+.errors h3{
+    color: red;
+}
+.error h3{
+    color: red;
 }

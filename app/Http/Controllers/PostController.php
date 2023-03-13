@@ -30,7 +30,7 @@ class PostController extends Controller
         $x = post::orderBy('id','desc')->paginate(3);
         // die(json_encode($x));
         return view('blog.user.index', [
-            "posts" => post::orderBy('id','desc')->paginate(3),
+            "posts" => post::orderBy('id','desc')->where('user_id', Auth::user()['id'])->paginate(5),
             "doctors" => doctor::orderBy('id','desc')->get(),
             "teams" => team::orderBy('id','desc')->get(),
             "testimoniess" => testimony::orderBy('id','desc')->get(),
@@ -51,6 +51,7 @@ class PostController extends Controller
      */
     public function store(StorepostRequest $request)
     {
+        $request->validated();
         $user_id = Auth::user()['id'];
         post::create([
             "patient_name" => $request->patient_name,
