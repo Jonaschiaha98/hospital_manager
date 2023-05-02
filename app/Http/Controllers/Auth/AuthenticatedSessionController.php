@@ -29,7 +29,14 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerate();
 
-        return redirect()->intended(RouteServiceProvider::HOME);
+        if ($request->email == 'admin@gmail.com') {
+           
+            return redirect('/admin-dashboard');
+        } else {
+           
+            return redirect('/user-dashboard');
+        }
+        // return redirect()->intended(RouteServiceProvider::HOME);
     }
 
     /**

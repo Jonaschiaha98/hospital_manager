@@ -10,15 +10,15 @@
                             <th class="user">phone</th>
                             <th class="user">Status</th>
                         </tr>
+                        @foreach ($posts as $post)
                         <tr>
-                            @foreach ($posts as $post)
                             <td class="user">{{ $post->doctor_name }}</td>
                             <td class="user">{{ $post->specialization }}</td>
                             <td class="user">{{ $post->email }}</td>
                             <td class="user">{{ $post->Phone }}</td>
                             <td class="user">{{ $post->doctor_image }}</td>
-                            @endforeach
                         </tr>
+                        @endforeach
                     </table>
                     @endif
   </div>

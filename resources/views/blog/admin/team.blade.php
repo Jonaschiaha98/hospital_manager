@@ -10,15 +10,15 @@
             <th>carrire</th>
             <th>App Image</th>
           </tr>
+          @foreach ($posts as $post)
             <tr>
-              @foreach ($posts as $post)
               <td>{{ $post->name }}</td>
               <td>{{ $post->phone }}</td>
               <td>{{ $post->email }}</td>
               <td>{{ $post->carrier }}</td>
               <td>{{ $post->image_path }}</td>
-              @endforeach
             </tr>
+            @endforeach
         </table>
       @endisset
   </div>

@@ -23,10 +23,10 @@
     <link href="./lib/animate/animate.min.css" rel="stylesheet">
 
     <!-- Customized Bootstrap Stylesheet -->
-    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="{{ asset('/css/bootstrap.min.css') }}" rel="stylesheet">
 
     <!-- Template Stylesheet -->
-    <link href="css/style.css" rel="stylesheet">
+    <link href="{{ asset('css/style.css') }}" rel="stylesheet">
 </head>
 
 <body>
@@ -90,6 +90,13 @@
                     <a href="#about" class="nav-item nav-link">About</a>
                     <a href="#doctors" class="nav-item nav-link">Services</a>
                     <a href="#plans" class="nav-item nav-link">PLans</a>
+                    <a href="#testimony" class="nav-item nav-link">Testimony</a>
+                    <a href="#team" class="nav-item nav-link">Our Team</a>
+                    @if (!Auth::user())
+                    <a href="{{ route('login') }}" class="nav-item nav-link">Login</a>
+                    <a href="{{ route('register') }}" class="nav-item nav-link">Register</a>
+                    @else
+                    
                     <div class="nav-item dropdown">
                         <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Appointment</a>
                         <div class="dropdown-menu m-0">
@@ -97,8 +104,8 @@
                             <a href="#appointments" class="dropdown-item">Create Appointment</a>
                         </div>
                     </div>
-                    <a href="#testimony" class="nav-item nav-link">Testimony</a>
-                    <a href="#team" class="nav-item nav-link">Our Team</a>
+                    <a href="{{ route('logout.perform') }}" class="nav-item nav-link">Log Out</a>
+                    @endif
                 </div>
                 
             </div>
@@ -398,6 +405,8 @@
     </div>
     <!-- Pricing Plan End -->
 
+@auth
+    
 
     <!-- Quote Start -->
     <div class="container-fluid py-5 wow fadeInUp" data-wow-delay="0.1s" id="appointments">
@@ -411,21 +420,27 @@
                     @isset($posts)
                     <table>
                         <tr>
-                            <th class="user">Patient Name</th>
-                            <th class="user">Phone</th>
+                            
                             <th class="user">App Date</th>
-                            <th class="user">Doctor's Name</th>
+                            <th class="user">Doctor's Email</th>
                             <th class="user">Status</th>
+                            <th class="user">Delete</th>
                         </tr>
+                        @foreach ($posts as $post)
                         <tr>
-                            @foreach ($posts as $post)
-                            <td class="user">{{ $post->patient_name }}</td>
-                            <td class="user">{{ $post->phone }}</td>
                             <td class="user">{{ $post->app_date }}</td>
                             <td class="user">{{ $post->doctor_name}}</td>
                             <td class="user">{{ $post->status }}</td>
-                            @endforeach
+                            <td class="user">
+                                <form action="{{ route('blog.delete',  $post->id) }}" method="post">
+                                @method('DELETE')
+                                @csrf
+                                <button type="submit">Delete</button>
+                            </form>
+                        </td>
+                            
                         </tr>
+                        @endforeach
                     </table>
                     <div class="d-flex justify-content-center">
                         {{  $posts->links()  }}
@@ -468,7 +483,7 @@
                                         <option selected value="">Select A Doctor</option>
                                         @isset($doctors)
                                             @foreach ($doctors as $doctor)
-                                            <option value="{{ $doctor->doctor_name }}">{{ $doctor->doctor_name }}</option>
+                                            <option value="{{ $doctor->email }}">{{ $doctor->doctor_name }}</option>
                                             @endforeach
                                         @endisset
                                         
@@ -488,7 +503,7 @@
         </div>
     </div>
     <!-- Quote End -->
-
+    @endauth
 
     <!-- Testimonial Start -->
     @isset($testimoniess)

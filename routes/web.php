@@ -6,6 +6,10 @@ use App\Http\Controllers\PostController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\TeamController;
 use App\Http\Controllers\TestimonyController;
+use App\Models\doctor;
+use App\Models\post;
+use App\Models\team;
+use App\Models\testimony;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -20,35 +24,44 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+// Route::get('/', function () {
+//     return view('welcome');
+// });
 
 Route::get('/dashboard', function () {
     if (Auth::user()['name'] == 'admin') {
         return view('blog.admin.index');
     } else{
-        return view('blog.user.index');
+        return view('blog.user.index', [
+            "posts" => post::query()->orderBy('id','desc')->where('user_id', Auth::user()['id'])->paginate(5),
+            "doctors" => doctor::orderBy('id','desc')->get(),
+            "teams" => team::orderBy('id','desc')->get(),
+            "testimoniess" => testimony::orderBy('id','desc')->get(),
+        ]);
     } 
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
+    Route::get('/user-dashboard', [PostController::class, 'index']);
+    Route::get('/admin-dashboard', [DoctorController::class, 'index']);
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';
 
-Route::prefix('/blog')->group(function(){
+Route::prefix('/blog')->group(function () {
     Route::get('/create', [PostController::class, 'create'])->name('blog.create');
     Route::get('/', [PostController::class, 'index'])->name('blog.index');
-    Route::get('/{id}', [PostController::class, 'show'])->name('blog.show');
+    // Route::get('/', [PostController::class, 'indexx'])->name('blog.indexx');
+    // Route::get('/#appointments', [PostController::class, 'index'])->name('blog.indexx');
+    Route::get('/{id}/show', [PostController::class, 'show'])->name('blog.show');
     Route::post('/', [PostController::class, 'store'])->name('blog.store');
     Route::get('/edit/{id}', [PostController::class, 'edit'])->name('blog.edit');
-    Route::patch('/{id}', [PostController::class, 'update'])->name('blog.update');
+    Route::patch('/update/{id}', [PostController::class, 'update'])->name('blog.update');
+    Route::patch('/update/cancel/{id}', [PostController::class, 'updateCancel'])->name('blog.update.cancel');
     Route::delete('/{id}', [PostController::class, 'destroy'])->name('blog.delete');
-
 });
 
 
@@ -75,4 +88,10 @@ Route::get('/admin/team/create', [TeamController::class, 'create'])->name('team.
 Route::get('/admin/team/list', [TeamController::class, 'index'])->name('team.index');
 Route::post('/adminss', [TeamController::class, 'store'])->name('team.store');
 
-Route::fallback(fallback::class);
+// Route::fallback(fallback::class);
+Route::group(['middleware' => ['auth']], function() {
+    /**
+    * Logout Route
+    */
+    Route::get('/ok/logout', [DoctorController::class, 'perform'])->name('logout.perform');
+ });

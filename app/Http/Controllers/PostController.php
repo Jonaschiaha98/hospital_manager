@@ -5,12 +5,15 @@ namespace App\Http\Controllers;
 use App\Models\post;
 use App\Http\Requests\StorepostRequest;
 use App\Http\Requests\UpdatepostRequest;
+use App\Mail\myAppointment;
+use App\Mail\WelcomeMail;
 use App\Models\doctor;
 use App\Models\team;
 use App\Models\testimony;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
 use PhpParser\Node\Stmt\Return_;
 
 class PostController extends Controller
@@ -21,23 +24,19 @@ class PostController extends Controller
 
     public function __construct()
     {
-        $this->middleware('auth')->only(["index", "store"]);
+        $this->middleware('auth')->only(["store", "destroy"]);
     }
     public function index()
     {
-        // $posts = post::orderBy('id','desc')->get();
-        // // dd();
-        $x = post::orderBy('id','desc')->paginate(3);
-        // die(json_encode($x));
         return view('blog.user.index', [
-            "posts" => post::orderBy('id','desc')->where('user_id', Auth::user()['id'])->paginate(5),
+            "posts" => post::query()->orderBy('id','desc')->where('user_id', Auth::user()['id'])->paginate(5),
             "doctors" => doctor::orderBy('id','desc')->get(),
             "teams" => team::orderBy('id','desc')->get(),
             "testimoniess" => testimony::orderBy('id','desc')->get(),
         ]);
         
     }
-
+    
     /**
      * Show the form for creating a new resource.
      */
@@ -53,7 +52,7 @@ class PostController extends Controller
     {
         $request->validated();
         $user_id = Auth::user()['id'];
-        post::create([
+        $user = post::create([
             "patient_name" => $request->patient_name,
             "phone" => $request->phone,
             "app_date" => $request->app_date,
@@ -62,6 +61,8 @@ class PostController extends Controller
             "status" => $request->status,
             "user_id" => $user_id
         ]);
+        // Mail::to($user->doctor_name)->send(new myAppointment([]));
+
         return redirect()->route('blog.index');
     }
 
@@ -84,16 +85,23 @@ class PostController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdatepostRequest $request, post $post)
+    public function update(UpdatepostRequest $request, post $id)
     {
-        //
+        post::query()->where('id', $id->id)->update(["status" => "Approved"]);
+        return redirect()->route('admin.appointment');
+    }
+    public function updateCancel(UpdatepostRequest $request, post $id)
+    {
+        post::query()->where('id', $id->id)->update(["status" => "Cancelled"]);
+        return redirect()->route('admin.appointment');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(post $post)
+    public function destroy($id)
     {
-        //
+        post::where('id', $id)->forceDelete();
+        return redirect()->route('blog.index');
     }
 }

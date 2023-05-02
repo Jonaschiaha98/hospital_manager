@@ -23,7 +23,7 @@ class StoretestimonyRequest extends FormRequest
     {
         return [
             "name" => "required|max:255|unique:testimonies,name",
-            "testimoney" => "required|max:255",
+            "testimony" => "required|max:255",
             "image_path" => "max:255",
         ];
     }

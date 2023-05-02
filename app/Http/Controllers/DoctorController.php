@@ -12,6 +12,9 @@ use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Session;
+
 class DoctorController extends Controller
 {
     /**
@@ -99,5 +102,14 @@ class DoctorController extends Controller
             "posts" => post::orderBy('id', 'desc')->get(),
         ]);
         
+    }
+
+    public function perform()
+    {
+        Session::flush();
+        
+        Auth::logout();
+
+        return redirect(route('login'));
     }
 }
