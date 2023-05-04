@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\post;
 use App\Http\Requests\StorepostRequest;
 use App\Http\Requests\UpdatepostRequest;
+use App\Mail\approvalMail;
 use App\Mail\myAppointment;
 use App\Mail\WelcomeMail;
 use App\Models\doctor;
@@ -61,7 +62,10 @@ class PostController extends Controller
             "status" => $request->status,
             "user_id" => $user_id
         ]);
-        // Mail::to($user->doctor_name)->send(new myAppointment([]));
+        Mail::to($request->email)->send(new myAppointment([
+            "name" => $request->patient_name,
+            "email" => $request->doctor_name
+        ]));
 
         return redirect()->route('blog.index');
     }
@@ -88,6 +92,10 @@ class PostController extends Controller
     public function update(UpdatepostRequest $request, post $id)
     {
         post::query()->where('id', $id->id)->update(["status" => "Approved"]);
+        $patient = post::query()->where('id', $id->id)->get();
+        Mail::to($patient->email)->send(new approvalMail([
+            "name" => $patient->patient_name
+        ]));
         return redirect()->route('admin.appointment');
     }
     public function updateCancel(UpdatepostRequest $request, post $id)
